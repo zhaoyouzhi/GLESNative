@@ -1,0 +1,48 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 28
+    defaultConfig {
+        applicationId "android.gxsn.com.glesnativedemo"
+        minSdkVersion 19
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        externalNativeBuild {
+            cmake {
+                cppFlags "-std=c++14 -frtti -fexceptions"
+                abiFilters  "armeabi-v7a", "arm64-v8a","x86","x86_64" //配置输出的abi体系结构下的so库，
+            }
+        }
+        ndk {
+            //打包进APK的ABI类型
+            abiFilters 'arm64-v8a','armeabi-v7a','x86','x86_64'
+        }
+    }
+
+    lintOptions {
+        disable 'GoogleAppIndexingWarning'
+        baseline file("lint-baseline.xml")
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+    externalNativeBuild {
+        cmake {
+            path "CMakeLists.txt"
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:28.0.0'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
